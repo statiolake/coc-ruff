@@ -1,7 +1,5 @@
 import { LanguageClient, LanguageClientOptions, ServerOptions, workspace } from 'coc.nvim';
-import { RUFF_SERVER_SUBCOMMAND } from './constant';
-
-import which from 'which';
+const RUFF_SERVER_SUBCOMMAND = 'server';
 
 export function createNativeServerClient(command: string) {
   const settings = workspace.getConfiguration('ruff');
@@ -20,35 +18,11 @@ export function createNativeServerClient(command: string) {
 
   const clientOptions: LanguageClientOptions = {
     documentSelector: ['python'],
-    initializationOptions: getInitializationOptions(),
+    initializationOptions: getInitializationOptions(command),
     disabledFeatures: getLanguageClientDisabledFeatures(),
   };
 
   const client = new LanguageClient('ruff', 'ruff native server', serverOptions, clientOptions);
-  return client;
-}
-
-export function createLanguageClient(command: string) {
-  const settings = workspace.getConfiguration('ruff');
-  const newEnv = { ...process.env };
-
-  const serverOptions: ServerOptions = {
-    command,
-    options: { env: newEnv },
-  };
-
-  // MEMO: Used in ruff-lsp v0.0.41 and earlier. This item will be removed in the future
-  if (settings.enableExperimentalFormatter) {
-    newEnv.RUFF_EXPERIMENTAL_FORMATTER = '1';
-  }
-
-  const clientOptions: LanguageClientOptions = {
-    documentSelector: ['python'],
-    initializationOptions: getInitializationOptions(),
-    disabledFeatures: getLanguageClientDisabledFeatures(),
-  };
-
-  const client = new LanguageClient('ruff', 'ruff-lsp', serverOptions, clientOptions);
   return client;
 }
 
@@ -182,16 +156,9 @@ function getLintRunSetting(): Run {
   return settings.get<Run>('lint.run', defaultValue);
 }
 
-function getInitializationOptions() {
+function getInitializationOptions(command: string) {
   const initializationOptions = convertFromWorkspaceConfigToInitializationOptions();
-
-  // MEMO: Custom Feature
-  if (workspace.getConfiguration('ruff').get<boolean>('useDetectRuffCommand')) {
-    const envRuffCommandPath = which.sync('ruff', { nothrow: true });
-    if (envRuffCommandPath) {
-      initializationOptions.settings.path = [envRuffCommandPath];
-    }
-  }
+  initializationOptions.settings.path = [command];
 
   return initializationOptions;
 }

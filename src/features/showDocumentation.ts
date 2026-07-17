@@ -47,17 +47,7 @@ class ShowDocumentationCodeActionProvider implements CodeActionProvider {
 
   public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext) {
     const doc = workspace.getDocument(document.uri);
-    const wholeRange = Range.create(0, 0, doc.lineCount, 0);
-    let whole = false;
-    if (
-      range.start.line === wholeRange.start.line &&
-      range.start.character === wholeRange.start.character &&
-      range.end.line === wholeRange.end.line &&
-      range.end.character === wholeRange.end.character
-    ) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      whole = true;
-    }
+    if (!doc) return [];
     const codeActions: CodeAction[] = [];
 
     /** Show web documentation for [ruleId] */

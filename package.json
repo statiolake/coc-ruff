@@ -1,8 +1,8 @@
 {
-  "name": "@yaegassy/coc-ruff",
-  "version": "0.8.1",
-  "description": "ruff server extension for coc.nvim",
-  "author": "yaegassy <yosstools@gmail.com>",
+  "name": "@statiolake/coc-ruff",
+  "version": "0.1.0",
+  "description": "Managed Ruff language server extension for coc.nvim",
+  "author": "statiolake <20490597+statiolake@users.noreply.github.com>",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
@@ -21,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/yaegassy/coc-ruff"
+    "url": "git+https://github.com/statiolake/coc-ruff.git"
   },
   "publishConfig": {
     "access": "public"
@@ -39,20 +39,18 @@
     "semi": true
   },
   "devDependencies": {
-    "@types/node": "^20.11.17",
-    "@types/semver": "^7.5.8",
-    "@types/which": "^2.0.1",
+    "@statiolake/coc-utils": "git+https://github.com/statiolake/coc-utils.git",
+    "@types/node": "^16.18.0",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
-    "coc.nvim": "^0.0.82",
+    "coc.nvim": "^0.0.83-next.24",
     "esbuild": "^0.16.17",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",
     "prettier": "^3.2.5",
     "rimraf": "^5.0.1",
-    "typescript": "^5.3.3",
-    "which": "^3.0.0"
+    "typescript": "^5.3.3"
   },
   "activationEvents": [
     "onLanguage:python"
@@ -97,35 +95,20 @@
           "default": false,
           "description": "Whether to display the code action for open the Ruff rule documentation web page included in the diagnostic information."
         },
-        "ruff.useDetectRuffCommand": {
-          "type": "boolean",
-          "default": true,
-          "description": "Automatically detects the ruff command in the execution environment and sets `ruff.path`."
-        },
         "ruff.autoFixOnSave": {
           "type": "boolean",
           "default": false,
           "description": "Turns auto fix on save on or off."
         },
-        "ruff.nativeServer": {
-          "default": true,
-          "description": "Use the integrated Rust-based language server, available now in Beta.",
-          "type": "boolean"
-        },
         "ruff.nativeBinaryPath": {
           "type": "string",
           "default": "",
-          "description": "Custom path for the `ruff` binary when using the native server. If no value is set, the `ruff` command will be detected from the runtime environment."
+          "description": "Use an existing Ruff executable instead of the managed copy."
         },
-        "ruff.serverPath": {
-          "type": "string",
-          "default": "",
-          "description": "Custom path to the ruff-lsp command. If not set, the `ruff-lsp` command found in the current Python environment or venv environment will be used."
-        },
-        "ruff.builtin.pythonPath": {
-          "type": "string",
-          "default": "",
-          "description": "Python 3.x path (Absolute path) to be used for built-in install."
+        "ruff.prompt": {
+          "type": "boolean",
+          "default": false,
+          "description": "Prompt before downloading a missing Ruff executable."
         },
         "ruff.args": {
           "default": [],
@@ -383,7 +366,7 @@
             "verbose"
           ],
           "default": "off",
-          "description": "Traces the communication between coc.nvim and the ruff-lsp."
+          "description": "Traces the communication between coc.nvim and the Ruff language server."
         }
       }
     },
@@ -414,14 +397,20 @@
         "title": "Restart Server"
       },
       {
-        "command": "ruff.builtin.installServer",
-        "title": "Install ruff-lsp"
+        "command": "ruff.install",
+        "title": "Install Ruff"
+      },
+      {
+        "command": "ruff.update",
+        "title": "Update Ruff"
       }
     ]
   },
-  "dependencies": {
-    "semver": "^7.6.2",
-    "toml": "^3.0.0"
+  "files": [
+    "lib/index.js"
+  ],
+  "bugs": {
+    "url": "https://github.com/statiolake/coc-ruff/issues"
   },
-  "packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447"
+  "homepage": "https://github.com/statiolake/coc-ruff#readme"
 }
